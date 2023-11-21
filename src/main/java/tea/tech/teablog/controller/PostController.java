@@ -3,12 +3,10 @@ package tea.tech.teablog.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tea.tech.teablog.dto.PostRequest;
 import tea.tech.teablog.dto.ResponseService;
+import tea.tech.teablog.exception.RestParameterNotFoundException;
 import tea.tech.teablog.service.PostService;
 
 @Slf4j
@@ -25,6 +23,15 @@ public class PostController {
         ResponseService responseService = new ResponseService();
         responseService = postService.createPost(request);
         log.info("Outgoing create post {}", request.getAuthor());
+        return responseService;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseService getPostById(@PathVariable Long id) throws RestParameterNotFoundException {
+        log.info("Incoming get post by id {}", id);
+        ResponseService responseService = new ResponseService();
+        responseService = postService.getPostById(id);
+        log.info("Outgoing get post by id {}", id);
         return responseService;
     }
 }
