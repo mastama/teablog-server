@@ -48,4 +48,14 @@ public class PostController {
             throw new RestParameterNotFoundException("Post not found with id: " + id);
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseService deletePostById(@PathVariable Long id) throws RestParameterNotFoundException {
+        log.info("Incoming delete post by id {}", id);
+        ResponseService responseService;
+        responseService = postService.deletePostById(id);
+        log.info("Outgoing delete post by id {}", id);
+
+        return responseService;
+    }
 }

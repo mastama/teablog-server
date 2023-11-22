@@ -61,11 +61,26 @@ public class PostService {
             Post post = postRepository.save(updatePost);
 
             responseService.setResponseCode(Constant.RESPONSE.successCode);
-            responseService.setResponseDesc(Constant.RESPONSE.approvedDescription);
+            responseService.setResponseDesc(Constant.RESPONSE.updateDescription);
             responseService.setData(post);
         } else {
             throw new RestParameterNotFoundException("Post not found witd id: " + id);
         }
+        return responseService;
+    }
+
+    public ResponseService deletePostById(Long id) throws RestParameterNotFoundException {
+        log.info("Start delete post by id {}", id);
+        ResponseService responseService = new ResponseService();
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RestParameterNotFoundException("Post not found with id: " + id));
+
+        postRepository.deleteById(id);
+
+        //konversi Post ke ResponseService
+        responseService.setResponseCode(Constant.RESPONSE.successCode);
+        responseService.setResponseDesc(Constant.RESPONSE.deleteDescription);
+        log.info("End delete post by id {}", id);
         return responseService;
     }
 }
