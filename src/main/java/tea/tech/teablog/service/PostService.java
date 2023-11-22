@@ -51,4 +51,21 @@ public class PostService {
         log.info("End get post by id {}", id);
         return responseService;
     }
+
+    public ResponseService updatePostById(Long id, Post updatePost) throws RestParameterNotFoundException {
+        log.info("Start update post by id {}", updatePost.getId());
+        ResponseService responseService = new ResponseService();
+
+        if (postRepository.existsById(id)) {
+            updatePost.setId(id);
+            Post post = postRepository.save(updatePost);
+
+            responseService.setResponseCode(Constant.RESPONSE.successCode);
+            responseService.setResponseDesc(Constant.RESPONSE.approvedDescription);
+            responseService.setData(post);
+        } else {
+            throw new RestParameterNotFoundException("Post not found witd id: " + id);
+        }
+        return responseService;
+    }
 }
